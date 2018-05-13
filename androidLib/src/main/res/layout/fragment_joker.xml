@@ -9,6 +9,8 @@
         android:id="@+id/joke_frag_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="@string/hello_blank_fragment" />
+        tools:text="@string/hello_blank_fragment"
+        android:textSize="24sp"
+        android:padding="@dimen/padding"/>
 
 </FrameLayout>

@@ -9,11 +9,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 
 import com.example.android.androidlibrary.JokerActivity;
 import com.example.android.javalib.Joker;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -25,6 +27,8 @@ public class MainActivityFragment extends Fragment {
 
     private Button jokeBt;
     static String retrievedJoke;
+    private InterstitialAd interstitialAd;
+    private ProgressBar progressBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -41,17 +45,29 @@ public class MainActivityFragment extends Fragment {
                 .build();
         mAdView.loadAd(adRequest);
 
+        progressBar = root.findViewById(R.id.progressbar);
+
+        interstitialAd = new InterstitialAd(getActivity());
+        interstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        interstitialAd.loadAd(new AdRequest.Builder().build());
+
         jokeBt = root.findViewById(R.id.joke_bt);
         jokeBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progressBar.setVisibility(View.VISIBLE);
                 new EndpointsAsyncTask().execute(new Pair<Context, String>(getActivity(), "joke"));
+
+                if(interstitialAd.isLoaded()) {
+                    interstitialAd.show();
+                }
 
                 Intent getJokeintent = new Intent(getActivity(), JokerActivity.class);
                 Joker joker = new Joker();
                 retrievedJoke = joker.getJoke();
                 getJokeintent.putExtra(JokerActivity.JOKE_KEY, retrievedJoke);
                 startActivity(getJokeintent);
+                progressBar.setVisibility(View.GONE);
             }
         });
 

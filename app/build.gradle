@@ -72,3 +72,24 @@ dependencies {
     })
     testImplementation 'junit:junit:4.12'
 }
+
+task testProject {
+    dependsOn(['launchGCE','runAllTests','shutdownGCE'])
+}
+
+task launchGCE {
+    dependsOn ':backend:appengineStart'
+    project(':backend')
+}
+
+task runAllTests {
+    dependsOn ':app:connectedAndroidTest'
+    mustRunAfter 'launchGCE'
+}
+
+task shutdownGCE {
+    dependsOn ':backend:appengineStop'
+    mustRunAfter 'runAllTests'
+    project(':backend')
+
+}
