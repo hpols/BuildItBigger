@@ -20,7 +20,9 @@ public class EndpointsAsyncTaskTest {
         new EndpointsAsyncTask().execute(new Pair<>(fragment.getContext(), "joke"));
 
         count.await(2000, TimeUnit.MILLISECONDS);
+        EndpointsAsyncTask.tester = true;
 
-        assert MainActivityFragment.retrievedJoke != null && !MainActivityFragment.retrievedJoke.isEmpty();
+        assert EndpointsAsyncTask.jokeRetrieved != null && !EndpointsAsyncTask.jokeRetrieved.isEmpty();
+
     }
 }

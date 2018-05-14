@@ -13,6 +13,7 @@ import android.widget.ProgressBar;
 
 import com.example.android.androidlibrary.JokerActivity;
 import com.example.android.javalib.Joker;
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
@@ -20,7 +21,7 @@ import com.google.android.gms.ads.InterstitialAd;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MainActivityFragment extends Fragment {
+public class MainActivityFragment extends Fragment implements EndpointsAsyncTask.OnTaskCompleted {
 
     public MainActivityFragment() {
     }
@@ -28,7 +29,7 @@ public class MainActivityFragment extends Fragment {
     private Button jokeBt;
     static String retrievedJoke;
     private InterstitialAd interstitialAd;
-    private ProgressBar progressBar;
+    private static ProgressBar progressBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -56,22 +57,29 @@ public class MainActivityFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 progressBar.setVisibility(View.VISIBLE);
-                new EndpointsAsyncTask().execute(new Pair<Context, String>(getActivity(), "joke"));
-
-                if(interstitialAd.isLoaded()) {
+                if (interstitialAd.isLoaded()) {
                     interstitialAd.show();
                 }
 
-                Intent getJokeintent = new Intent(getActivity(), JokerActivity.class);
-                Joker joker = new Joker();
-                retrievedJoke = joker.getJoke();
-                getJokeintent.putExtra(JokerActivity.JOKE_KEY, retrievedJoke);
-                startActivity(getJokeintent);
-                progressBar.setVisibility(View.GONE);
+                interstitialAd.setAdListener(new AdListener() {
+                    @Override
+                    public void onAdClosed() {
+                        super.onAdClosed();
+                        new EndpointsAsyncTask(MainActivityFragment.this)
+                                .execute(MainActivityFragment.this);
+                    }
+                });
             }
         });
 
         return root;
     }
 
+    @Override
+    public void onTaskCompleted() {
+        Intent getJokeintent = new Intent(getActivity(), JokerActivity.class);
+        getJokeintent.putExtra(JokerActivity.JOKE_KEY, retrievedJoke);
+        startActivity(getJokeintent);
+        progressBar.setVisibility(View.GONE);
+    }
 }

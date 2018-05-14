@@ -16,7 +16,7 @@ import com.example.android.javalib.Joker;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MainActivityFragment extends Fragment {
+public class MainActivityFragment extends Fragment implements EndpointsAsyncTask.OnTaskCompleted {
 
     public MainActivityFragment() {
     }
@@ -34,17 +34,30 @@ public class MainActivityFragment extends Fragment {
         jokeBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new EndpointsAsyncTask().execute(new Pair<Context, String>(getActivity(), "joke"));
+                progressBar.setVisibility(View.VISIBLE);
+                if (interstitialAd.isLoaded()) {
+                    interstitialAd.show();
+                }
 
-                Intent getJokeintent = new Intent(getActivity(), JokerActivity.class);
-                Joker joker = new Joker();
-                retrievedJoke = joker.getJoke();
-                getJokeintent.putExtra(JokerActivity.JOKE_KEY, retrievedJoke);
-                startActivity(getJokeintent);
+                interstitialAd.setAdListener(new AdListener() {
+                    @Override
+                    public void onAdClosed() {
+                        super.onAdClosed();
+                        new EndpointsAsyncTask(MainActivityFragment.this)
+                                .execute(new Pair<Context, String>(getActivity(), "joke"));
+                    }
+                });
             }
         });
 
         return root;
     }
 
+    @Override
+    public void onTaskCompleted() {
+        Intent getJokeintent = new Intent(getActivity(), JokerActivity.class);
+        getJokeintent.putExtra(JokerActivity.JOKE_KEY, retrievedJoke);
+        startActivity(getJokeintent);
+        progressBar.setVisibility(View.GONE);
+    }
 }
