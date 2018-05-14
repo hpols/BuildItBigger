@@ -14,9 +14,8 @@ import com.udacity.gradle.builditbigger.backend.myApi.MyApi;
 
 import java.io.IOException;
 
-public class EndpointsAsyncTask extends AsyncTask<MainActivityFragment, Void, String> {
+public class EndpointsAsyncTask extends AsyncTask<Context, Void, String> {
     private static MyApi myApiService = null;
-    private MainActivityFragment mainActivityFragment;
     private Context context;
     public static boolean tester = false;
 
@@ -33,7 +32,7 @@ public class EndpointsAsyncTask extends AsyncTask<MainActivityFragment, Void, St
     }
 
     @Override
-    protected String doInBackground(MainActivityFragment... params) {
+    protected String doInBackground(Context... params) {
         if (myApiService == null) {  // Only do this once
             MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(),
                     new AndroidJsonFactory(), null)
@@ -52,7 +51,7 @@ public class EndpointsAsyncTask extends AsyncTask<MainActivityFragment, Void, St
             myApiService = builder.build();
         }
 
-        mainActivityFragment = params[0];
+        context = params[0];
 
         try {
             return myApiService.setJoke(new MyBean()).execute().getData();
