@@ -20,9 +20,9 @@ public class MyEndpoint {
     /** Add the joke to the Api */
     @ApiMethod(name = "setJoke")
     public MyBean setJoke(MyBean jokeBean) {
-        MyBean response = new MyBean();
+        jokeBean = new MyBean();
         Joker joker = new Joker();
-        response.setData(joker.getJoke());
+        jokeBean.setData(joker.getJoke());
 
         return jokeBean;
     }

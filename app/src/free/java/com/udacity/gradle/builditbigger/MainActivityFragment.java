@@ -66,7 +66,7 @@ public class MainActivityFragment extends Fragment implements EndpointsAsyncTask
                     public void onAdClosed() {
                         super.onAdClosed();
                         new EndpointsAsyncTask(MainActivityFragment.this)
-                                .execute(MainActivityFragment.this);
+                                .execute();
                     }
                 });
             }

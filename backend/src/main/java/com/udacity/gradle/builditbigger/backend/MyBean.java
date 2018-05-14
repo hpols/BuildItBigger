@@ -6,10 +6,9 @@ import com.example.android.javalib.Joker;
 public class MyBean {
 
     private String myData;
-    private Joker joker;
 
     public String getData() {
-        return joker.getJoke();
+        return myData;
     }
 
     public void setData(String data) {
