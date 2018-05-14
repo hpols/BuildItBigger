@@ -27,9 +27,9 @@ public class MainActivityFragment extends Fragment implements EndpointsAsyncTask
     }
 
     private Button jokeBt;
-    static String retrievedJoke;
+    public static String retrievedJoke;
     private InterstitialAd interstitialAd;
-    private static ProgressBar progressBar;
+    private ProgressBar progressBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -66,7 +66,7 @@ public class MainActivityFragment extends Fragment implements EndpointsAsyncTask
                     public void onAdClosed() {
                         super.onAdClosed();
                         new EndpointsAsyncTask(MainActivityFragment.this)
-                                .execute();
+                                .execute(getActivity());
                     }
                 });
             }
