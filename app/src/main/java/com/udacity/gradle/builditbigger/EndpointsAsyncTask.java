@@ -7,7 +7,6 @@ import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
 import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
-import com.udacity.gradle.builditbigger.backend.myApi.model.MyBean;
 import com.udacity.gradle.builditbigger.backend.myApi.MyApi;
 
 
@@ -64,9 +63,9 @@ public class EndpointsAsyncTask extends AsyncTask<Context, Void, String> {
         if (tester) {
             jokeRetrieved = result;
         }
-        MainActivityFragment.retrievedJoke = result;
+        MainActivityFragment fragment = new MainActivityFragment();
+        fragment.retrievedJoke = result;
         listener.onTaskCompleted();
-        //MainActivityFragment.openJokerActivity(context);
 
     }
 }

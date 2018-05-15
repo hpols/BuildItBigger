@@ -4,14 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 
 import com.example.android.androidlibrary.JokerActivity;
-import com.example.android.javalib.Joker;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -22,7 +21,8 @@ public class MainActivityFragment extends Fragment implements EndpointsAsyncTask
     }
 
     private Button jokeBt;
-    static String retrievedJoke;
+    public String retrievedJoke;
+    private ProgressBar progressBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -30,26 +30,17 @@ public class MainActivityFragment extends Fragment implements EndpointsAsyncTask
         View root = inflater.inflate(R.layout.fragment_main, container, false);
         Context context = getActivity();
 
+        progressBar = root.findViewById(R.id.progressbar);
+
         jokeBt = root.findViewById(R.id.joke_bt);
         jokeBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 progressBar.setVisibility(View.VISIBLE);
-                if (interstitialAd.isLoaded()) {
-                    interstitialAd.show();
-                }
-
-                interstitialAd.setAdListener(new AdListener() {
-                    @Override
-                    public void onAdClosed() {
-                        super.onAdClosed();
-                        new EndpointsAsyncTask(MainActivityFragment.this)
-                                .execute(new Pair<Context, String>(getActivity(), "joke"));
-                    }
-                });
+                new EndpointsAsyncTask(MainActivityFragment.this)
+                        .execute(getActivity());
             }
         });
-
         return root;
     }
 

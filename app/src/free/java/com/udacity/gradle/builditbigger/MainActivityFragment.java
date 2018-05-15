@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,6 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 
 import com.example.android.androidlibrary.JokerActivity;
-import com.example.android.javalib.Joker;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -27,7 +25,7 @@ public class MainActivityFragment extends Fragment implements EndpointsAsyncTask
     }
 
     private Button jokeBt;
-    public static String retrievedJoke;
+    public String retrievedJoke;
     private InterstitialAd interstitialAd;
     private ProgressBar progressBar;
 
@@ -46,7 +44,7 @@ public class MainActivityFragment extends Fragment implements EndpointsAsyncTask
                 .build();
         mAdView.loadAd(adRequest);
 
-        progressBar = root.findViewById(R.id.progressbar);
+        progressBar = root.findViewById(R.id.joke_pb);
 
         interstitialAd = new InterstitialAd(getActivity());
         interstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
